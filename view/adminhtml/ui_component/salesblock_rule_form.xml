@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Yireo SalesBlock2ByIp for Magento
+ *
+ * @package     Yireo_SalesBlock2ByIp
+ * @author      Yireo (https://www.yireo.com/)
+ * @copyright   Copyright 2018 Yireo (https://www.yireo.com/)
+ * @license     Open Source License (OSL v3)
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="matching">
+        <field name="conditions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="matchers" xsi:type="array">
+                        <item name="ip" xsi:type="string">Match an IP address</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+</form>
