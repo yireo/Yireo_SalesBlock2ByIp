@@ -1,0 +1,29 @@
+{
+  "name": "yireo/magento2-salesblock2-by-ip",
+  "license": "OSL-3.0",
+  "type": "magento2-module",
+  "version": "2.0.0",
+  "homepage": "https://www.yireo.com/software/magento-extensions/salesblock2",
+  "description": "Block transactions based on IP matching",
+  "keywords": [
+    "composer-installer",
+    "magento"
+  ],
+  "authors": [
+    {
+      "name": "Jisse Reitsma (Yireo)",
+      "email": "jisse@yireo.com"
+    }
+  ],
+  "require": {
+    "yireo/magento2-salesblock2": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Yireo\\SalesBlock2\\": ""
+    },
+    "files": [
+      "registration.php"
+    ]
+  }
+}
