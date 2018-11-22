@@ -8,11 +8,16 @@
  * @license     Open Source License (OSL v3)
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Yireo\SalesBlock2ByIp\Matcher;
 
 use Yireo\SalesBlock2\Api\MatcherInterface;
+use Yireo\SalesBlock2\Helper\Data;
+use Yireo\SalesBlock2\Match\Match;
+use Yireo\SalesBlock2\Match\MatchList;
+use Yireo\SalesBlock2ByIp\Utils\CurrentIp;
+use Yireo\SalesBlock2ByIp\Utils\IpMatcher;
 
 /**
  * Class Matcher
@@ -20,6 +25,43 @@ use Yireo\SalesBlock2\Api\MatcherInterface;
  */
 class Matcher implements MatcherInterface
 {
+    /**
+     * @var CurrentIp
+     */
+    private $currentIp;
+
+    /**
+     * @var IpMatcher
+     */
+    private $ipMatcher;
+    /**
+     * @var Data
+     */
+    private $helper;
+    /**
+     * @var MatchList
+     */
+    private $matchList;
+
+    /**
+     * Matcher constructor.
+     * @param CurrentIp $currentIp
+     * @param IpMatcher $ipMatcher
+     * @param Data $helper
+     * @param MatchList $matchList
+     */
+    public function __construct(
+        CurrentIp $currentIp,
+        IpMatcher $ipMatcher,
+        Data $helper,
+        MatchList $matchList
+    ) {
+        $this->currentIp = $currentIp;
+        $this->ipMatcher = $ipMatcher;
+        $this->helper = $helper;
+        $this->matchList = $matchList;
+    }
+
     /**
      * @return string
      */
@@ -45,10 +87,33 @@ class Matcher implements MatcherInterface
     }
 
     /**
+     * @param string $matchString
      * @return bool
      */
-    public function match(): bool
+    public function match(string $matchString): bool
     {
+        $matchStrings = $this->helper->stringToArray($matchString);
+        foreach ($matchStrings as $matchString) {
+            if ($this->ipMatcher->match($this->currentIp->getValue(), $matchString)) {
+                $this->addMatch(sprintf('Matched IP with %s', $matchString));
+                return true;
+            }
+
+            if ($this->ipMatcher->matchIpRange($this->currentIp->getValue(), $matchString)) {
+                $this->addMatch(sprintf('Matched IP with %s', $matchString));
+                return true;
+            }
+        }
+
         return false;
+    }
+
+    /**
+     * @param string $message
+     */
+    private function addMatch(string $message)
+    {
+        $match = new Match($message);
+        $this->matchList->addMatch($match);
     }
 }
