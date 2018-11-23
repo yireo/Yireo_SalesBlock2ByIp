@@ -13,8 +13,9 @@ declare(strict_types=1);
 namespace Yireo\SalesBlock2ByIp\Test\Unit\Matcher;
 
 use PHPUnit\Framework\TestCase;
+use Yireo\SalesBlock2\Exception\NoMatchException;
 use Yireo\SalesBlock2\Helper\Data;
-use Yireo\SalesBlock2\Match\MatchHolder;
+use Yireo\SalesBlock2\Match\Match;
 use Yireo\SalesBlock2ByIp\Matcher\Matcher as Target;
 use Yireo\SalesBlock2ByIp\Utils\CurrentIp;
 use Yireo\SalesBlock2ByIp\Utils\IpMatcher;
@@ -69,17 +70,24 @@ class MatcherTest extends TestCase
      * @dataProvider \Yireo\SalesBlock2ByIp\Test\Unit\DataProvider\IpPatterns::getData()
      * @param string $ipValue
      * @param string $matchPattern
-     * @param bool $returnValue
+     * @param bool $expectedReturnValue
+     * @throws NoMatchException
      */
-    public function testMatch(string $ipValue, string $matchPattern, bool $returnValue)
+    public function testMatch(string $ipValue, string $matchPattern, bool $expectedReturnValue)
     {
         $this->currentIpValue = $ipValue;
         $this->currentMatchPattern = $matchPattern;
 
         $target = $this->getTargetObject();
-        $currentValue = $this->getCurrentIp()->getValue();
-        $message = sprintf('Comparing "%s" with "%s"', $currentValue, $matchPattern);
-        $this->assertSame($returnValue, $target->match($matchPattern), $message);
+
+        if ($expectedReturnValue === true) {
+            $currentValue = $this->getCurrentIp()->getValue();
+            $message = sprintf('Comparing "%s" with "%s"', $currentValue, $matchPattern);
+            $this->assertInstanceOf(Match::class, $target->match($matchPattern), $message);
+        } else {
+            $this->expectException(NoMatchException::class);
+            $target->match($matchPattern);
+        }
     }
 
     /**
@@ -90,9 +98,8 @@ class MatcherTest extends TestCase
         $currentIp = $this->getCurrentIp();
         $helper = $this->getHelperMock();
         $ipMatcher = new IpMatcher();
-        $matchHolder = new MatchHolder();
 
-        $target = new Target($currentIp, $ipMatcher, $helper, $matchHolder);
+        $target = new Target($currentIp, $ipMatcher, $helper);
 
         return $target;
     }
