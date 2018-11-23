@@ -15,7 +15,7 @@ namespace Yireo\SalesBlock2ByIp\Matcher;
 use Yireo\SalesBlock2\Api\MatcherInterface;
 use Yireo\SalesBlock2\Helper\Data;
 use Yireo\SalesBlock2\Match\Match;
-use Yireo\SalesBlock2\Match\MatchList;
+use Yireo\SalesBlock2\Match\MatchHolder;
 use Yireo\SalesBlock2ByIp\Utils\CurrentIp;
 use Yireo\SalesBlock2ByIp\Utils\IpMatcher;
 
@@ -34,32 +34,34 @@ class Matcher implements MatcherInterface
      * @var IpMatcher
      */
     private $ipMatcher;
+
     /**
      * @var Data
      */
     private $helper;
+
     /**
-     * @var MatchList
+     * @var MatchHolder
      */
-    private $matchList;
+    private $matchHolder;
 
     /**
      * Matcher constructor.
      * @param CurrentIp $currentIp
      * @param IpMatcher $ipMatcher
      * @param Data $helper
-     * @param MatchList $matchList
+     * @param MatchHolder $matchHolder
      */
     public function __construct(
         CurrentIp $currentIp,
         IpMatcher $ipMatcher,
         Data $helper,
-        MatchList $matchList
+        MatchHolder $matchHolder
     ) {
         $this->currentIp = $currentIp;
         $this->ipMatcher = $ipMatcher;
         $this->helper = $helper;
-        $this->matchList = $matchList;
+        $this->matchHolder = $matchHolder;
     }
 
     /**
@@ -98,11 +100,6 @@ class Matcher implements MatcherInterface
                 $this->addMatch(sprintf('Matched IP with %s', $matchString));
                 return true;
             }
-
-            if ($this->ipMatcher->matchIpRange($this->currentIp->getValue(), $matchString)) {
-                $this->addMatch(sprintf('Matched IP with %s', $matchString));
-                return true;
-            }
         }
 
         return false;
@@ -113,7 +110,6 @@ class Matcher implements MatcherInterface
      */
     private function addMatch(string $message)
     {
-        $match = new Match($message);
-        $this->matchList->addMatch($match);
+        $this->matchHolder->setMatch(new Match($message));
     }
 }
