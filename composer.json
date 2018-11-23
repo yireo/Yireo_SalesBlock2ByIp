@@ -16,6 +16,7 @@
     }
   ],
   "require": {
+    "wikimedia/ip-set": "^1.2",
     "yireo/magento2-salesblock2": "^2.0"
   },
   "autoload": {

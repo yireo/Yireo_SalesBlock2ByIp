@@ -12,6 +12,8 @@ declare(strict_types = 1);
 
 namespace Yireo\SalesBlock2ByIp\Utils;
 
+use Wikimedia\IPSet;
+
 /**
  * Class IpMatcher
  * @package Yireo\SalesBlock2ByIp\Utils
@@ -29,7 +31,7 @@ class IpMatcher
             return true;
         }
 
-        return false;
+        return $this->matchIpRange($ip, $matchPattern);
     }
 
     /**
@@ -42,23 +44,9 @@ class IpMatcher
      */
     public function matchIpRange(string $ip, string $rangeString): bool
     {
-        // Convert subnet ranges
-        if (!preg_match('/([0-9\.]+)\/([0-9]+)/', $rangeString, $rangeMatch)) {
-            return false;
-        }
-
-        $rip = ip2long($rangeMatch[1]);
-        $ipStart = long2ip((float)$rip);
-        $ipEnd = long2ip((float)($rip | (1 << (32 - $rangeMatch[2])) - 1));
-        $rangeString = $ipStart . '-' . $ipEnd;
-
-        // Check for IP-ranges
-        if (!preg_match('/([0-9\.]+)-([0-9\.]+)/', $rangeString, $ipMatch)) {
-            return false;
-        }
-
-        if (version_compare($ip, $ipMatch[1], '>=') && version_compare($ip, $ipMatch[2], '<=')) {
-            return true;
+        if (preg_match('/([0-9\.]+)\/([0-9]+)/', $rangeString)) {
+            $ipset = new IPSet([$rangeString]);
+            return (bool)$ipset->match($ip);
         }
 
         return false;
