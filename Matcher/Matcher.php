@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace Yireo\SalesBlock2ByIp\Matcher;
 
 use Yireo\SalesBlock2\Api\MatcherInterface;
+use Yireo\SalesBlock2\Exception\NoMatchException;
 use Yireo\SalesBlock2\Helper\Data;
 use Yireo\SalesBlock2\Match\Match;
-use Yireo\SalesBlock2\Match\MatchHolder;
 use Yireo\SalesBlock2ByIp\Utils\CurrentIp;
 use Yireo\SalesBlock2ByIp\Utils\IpMatcher;
 
@@ -41,27 +41,19 @@ class Matcher implements MatcherInterface
     private $helper;
 
     /**
-     * @var MatchHolder
-     */
-    private $matchHolder;
-
-    /**
      * Matcher constructor.
      * @param CurrentIp $currentIp
      * @param IpMatcher $ipMatcher
      * @param Data $helper
-     * @param MatchHolder $matchHolder
      */
     public function __construct(
         CurrentIp $currentIp,
         IpMatcher $ipMatcher,
-        Data $helper,
-        MatchHolder $matchHolder
+        Data $helper
     ) {
         $this->currentIp = $currentIp;
         $this->ipMatcher = $ipMatcher;
         $this->helper = $helper;
-        $this->matchHolder = $matchHolder;
     }
 
     /**
@@ -90,26 +82,21 @@ class Matcher implements MatcherInterface
 
     /**
      * @param string $matchString
-     * @return bool
+     * @return Match
+     * @throws NoMatchException
      */
-    public function match(string $matchString): bool
+    public function match(string $matchString): Match
     {
         $matchStrings = $this->helper->stringToArray($matchString);
         foreach ($matchStrings as $matchString) {
-            if ($this->ipMatcher->match($this->currentIp->getValue(), $matchString)) {
-                $this->addMatch(sprintf('Matched IP with %s', $matchString));
-                return true;
+            if (!$this->ipMatcher->match($this->currentIp->getValue(), $matchString)) {
+                continue;
             }
+
+            $message = sprintf('Matched IP with %s', $matchString);
+            return new Match($message);
         }
 
-        return false;
-    }
-
-    /**
-     * @param string $message
-     */
-    private function addMatch(string $message)
-    {
-        $this->matchHolder->setMatch(new Match($message));
+        throw new NoMatchException(__('No match found'));
     }
 }
