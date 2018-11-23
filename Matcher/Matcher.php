@@ -87,14 +87,18 @@ class Matcher implements MatcherInterface
      */
     public function match(string $matchString): Match
     {
+        $currentIp = $this->currentIp->getValue();
         $matchStrings = $this->helper->stringToArray($matchString);
         foreach ($matchStrings as $matchString) {
-            if (!$this->ipMatcher->match($this->currentIp->getValue(), $matchString)) {
+            if (!$this->ipMatcher->match($currentIp, $matchString)) {
                 continue;
             }
 
             $message = sprintf('Matched IP with %s', $matchString);
-            return new Match($message);
+
+            $match = new Match($message);
+            $match->setVariables(['ip' => $currentIp]);
+            return $match;
         }
 
         throw new NoMatchException(__('No match found'));
