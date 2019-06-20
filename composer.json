@@ -21,7 +21,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Yireo\\SalesBlock2\\": ""
+      "Yireo\\SalesBlock2ByIp\\": ""
     },
     "files": [
       "registration.php"
