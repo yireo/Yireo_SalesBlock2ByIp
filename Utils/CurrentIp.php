@@ -8,7 +8,7 @@
  * @license     Open Source License (OSL v3)
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Yireo\SalesBlock2ByIp\Utils;
 
@@ -42,7 +42,11 @@ class CurrentIp
             return $this->ip;
         }
 
-        $ip = $_SERVER['REMOTE_ADDR'];
+        $ip = '';
+
+        if (!empty($_SERVER['REMOTE_ADDR'])) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
 
         if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -50,6 +54,6 @@ class CurrentIp
 
         $this->ip = $ip;
 
-        return (string) $this->ip;
+        return (string)$this->ip;
     }
 }
