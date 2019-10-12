@@ -31,6 +31,10 @@ class IpMatcher
             return true;
         }
 
+        if ($matchPattern === '*') {
+            return true;
+        }
+
         return $this->matchIpRange($ip, $matchPattern);
     }
 
