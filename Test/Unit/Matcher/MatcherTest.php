@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /**
  * Yireo SalesBlock2ByIp for Magento
  *
@@ -8,14 +9,12 @@
  * @license     Open Source License (OSL v3)
  */
 
-declare(strict_types=1);
-
 namespace Yireo\SalesBlock2ByIp\Test\Unit\Matcher;
 
 use PHPUnit\Framework\TestCase;
 use Yireo\SalesBlock2\Exception\NoMatchException;
 use Yireo\SalesBlock2\Helper\Data;
-use Yireo\SalesBlock2\Match\Match;
+use Yireo\SalesBlock2\Match\RuleMatch;
 use Yireo\SalesBlock2ByIp\Matcher\Matcher as Target;
 use Yireo\SalesBlock2ByIp\Utils\CurrentIp;
 use Yireo\SalesBlock2ByIp\Utils\IpMatcher;
@@ -83,7 +82,7 @@ class MatcherTest extends TestCase
         if ($expectedReturnValue === true) {
             $currentValue = $this->getCurrentIp()->getValue();
             $message = sprintf('Comparing "%s" with "%s"', $currentValue, $matchPattern);
-            $this->assertInstanceOf(Match::class, $target->match($matchPattern), $message);
+            $this->assertInstanceOf(RuleMatch::class, $target->match($matchPattern), $message);
         } else {
             $this->expectException(NoMatchException::class);
             $target->match($matchPattern);
