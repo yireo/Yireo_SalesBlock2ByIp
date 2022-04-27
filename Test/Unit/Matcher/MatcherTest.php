@@ -20,11 +20,6 @@ use Yireo\SalesBlock2ByIp\Matcher\Matcher as Target;
 use Yireo\SalesBlock2ByIp\Utils\CurrentIp;
 use Yireo\SalesBlock2ByIp\Utils\IpMatcher;
 
-/**
- * Class MatcherTest
- *
- * @package Yireo\SalesBlock2ByIp\Test\Unit\Matcher
- */
 class MatcherTest extends TestCase
 {
     /**
