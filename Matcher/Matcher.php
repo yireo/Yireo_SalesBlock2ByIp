@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /**
  * Yireo SalesBlock2ByIp for Magento
  *
@@ -8,14 +9,12 @@
  * @license     Open Source License (OSL v3)
  */
 
-declare(strict_types=1);
-
 namespace Yireo\SalesBlock2ByIp\Matcher;
 
 use Yireo\SalesBlock2\Api\MatcherInterface;
 use Yireo\SalesBlock2\Exception\NoMatchException;
 use Yireo\SalesBlock2\Helper\Data;
-use Yireo\SalesBlock2\Match\Match;
+use Yireo\SalesBlock2\Match\RuleMatch;
 use Yireo\SalesBlock2ByIp\Utils\CurrentIp;
 use Yireo\SalesBlock2ByIp\Utils\IpMatcher;
 
@@ -82,10 +81,10 @@ class Matcher implements MatcherInterface
 
     /**
      * @param string $matchString
-     * @return Match
+     * @return RuleMatch
      * @throws NoMatchException
      */
-    public function match(string $matchString): Match
+    public function match(string $matchString): RuleMatch
     {
         $currentIp = $this->currentIp->getValue();
         $matchStrings = $this->helper->stringToArray($matchString);
@@ -96,7 +95,7 @@ class Matcher implements MatcherInterface
 
             $message = sprintf('Matched IP with %s', $matchString);
 
-            $match = new Match($message);
+            $match = new RuleMatch($message);
             $match->setVariables(['ip' => $currentIp]);
             return $match;
         }
