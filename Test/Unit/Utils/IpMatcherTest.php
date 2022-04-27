@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Yireo SalesBlock2ByIp for Magento
  *
@@ -8,18 +8,11 @@
  * @license     Open Source License (OSL v3)
  */
 
-declare(strict_types=1);
-
 namespace Yireo\SalesBlock2ByIp\Test\Unit\Utils;
 
 use PHPUnit\Framework\TestCase;
 use Yireo\SalesBlock2ByIp\Utils\IpMatcher as Target;
 
-/**
- * Class IpMatcherTest
- *
- * @package Yireo\SalesBlock2ByIp\Test\Unit\Utils
- */
 class IpMatcherTest extends TestCase
 {
     /**
