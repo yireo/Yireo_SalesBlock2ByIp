@@ -2,11 +2,10 @@
 
 namespace Yireo\SalesBlock2ByIp\Test\Integration\Frontend;
 
-use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Yireo\SalesBlock2\Helper\Rule;
 use Yireo\SalesBlock2\Match\RuleMatch;
@@ -15,14 +14,9 @@ use Yireo\SalesBlock2\Test\Integration\RuleProvider;
 class RuleHelperTest extends TestCase
 {
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
-
-    /**
-     * @var Rule
-     */
-    private $ruleHelper;
 
     /**
      * Setup dependencies
@@ -31,7 +25,6 @@ class RuleHelperTest extends TestCase
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->ruleHelper = $this->objectManager->get(Rule::class);
     }
 
     /**
@@ -53,7 +46,7 @@ class RuleHelperTest extends TestCase
             $match = $ruleHelper->findMatch();
             $this->assertInstanceOf(RuleMatch::class, $match);
         } catch (NotFoundException $e) {
-            $this->assertTrue(false, 'No match found: ' . $e->getMessage());
+            $this->fail('No match found: ' . $e->getMessage());
         }
     }
 
@@ -67,7 +60,7 @@ class RuleHelperTest extends TestCase
 
     /**
      * @param string $configPath
-     * @param $value
+     * @param mixed $value
      */
     private function setConfigValue(string $configPath, $value)
     {

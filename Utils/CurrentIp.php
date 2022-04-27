@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 /**
  * Yireo SalesBlock2ByIp for Magento
  *
@@ -8,14 +9,8 @@
  * @license     Open Source License (OSL v3)
  */
 
-declare(strict_types=1);
-
 namespace Yireo\SalesBlock2ByIp\Utils;
 
-/**
- * Class CurrentIp
- * @package Yireo\SalesBlock2ByIp\Utils
- */
 class CurrentIp
 {
     /**
@@ -24,9 +19,9 @@ class CurrentIp
     private $ip = '';
 
     /**
-     * @param $ip
+     * @param string $ip
      */
-    public function setIp($ip)
+    public function setIp(string $ip)
     {
         $this->ip = $ip;
     }

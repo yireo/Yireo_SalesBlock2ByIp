@@ -120,12 +120,7 @@ class MatcherTest extends TestCase
     protected function getHelperMock(): Data
     {
         $helper = $this->createMock(
-            Data::class,
-            [],
-            [],
-            '',
-            false,
-            false
+            Data::class
         );
 
         $helper
