@@ -11,6 +11,7 @@
 
 namespace Yireo\SalesBlock2ByIp\Test\Unit\Matcher;
 
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use PHPUnit\Framework\TestCase;
 use Yireo\SalesBlock2\Exception\NoMatchException;
 use Yireo\SalesBlock2\Helper\Data;
@@ -108,7 +109,7 @@ class MatcherTest extends TestCase
      */
     protected function getCurrentIp(): CurrentIp
     {
-        $currentIp = new CurrentIp();
+        $currentIp = new CurrentIp($this->getMockBuilder(RemoteAddress::class)->getMock());
         $currentIp->setIp($this->currentIpValue);
 
         return $currentIp;
