@@ -11,13 +11,29 @@
 
 namespace Yireo\SalesBlock2ByIp\Utils;
 
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+
 class CurrentIp
 {
     /**
      * @var string
      */
     private $ip = '';
-
+    
+    /**
+     * @var RemoteAddress
+     */
+    private $remoteAddress;
+    
+    /**
+     * @param RemoteAddress $remoteAddress
+     */
+    public function __construct(
+        RemoteAddress $remoteAddress
+    ) {
+        $this->remoteAddress = $remoteAddress;
+    }
+    
     /**
      * @param string $ip
      */
@@ -37,17 +53,7 @@ class CurrentIp
             return $this->ip;
         }
 
-        $ip = '';
-
-        if (!empty($_SERVER['REMOTE_ADDR'])) {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        }
-
-        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        }
-
-        $this->ip = $ip;
+        $this->ip = $this->remoteAddress->getRemoteAddress();
 
         return (string)$this->ip;
     }
