@@ -3,7 +3,9 @@
 namespace Yireo\SalesBlock2ByIp\Test\Integration\Frontend;
 
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -35,7 +37,15 @@ class RuleHelperTest extends TestCase
     {
         $this->setConfigValue('salesblock/settings/enabled', 1);
         $this->getRuleProvider()->createRule('ip', '192.168.1.1', true);
-        $_SERVER['REMOTE_ADDR'] = '192.168.1.1';
+    
+        /** @var \Magento\Framework\App\Request\Http $request */
+        $request = $this->objectManager->get(RequestInterface::class);
+        $server = $request->getServer();
+        $server->set('REMOTE_ADDR', '192.168.1.1');
+        $request->setServer($server);
+        
+        $remoteAddress = $this->objectManager->get(RemoteAddress::class);
+        $this->assertSame('192.168.1.1', $remoteAddress->getRemoteAddress());
 
         /** @var Rule $ruleHelper */
         $ruleHelper = $this->objectManager->get(Rule::class);
