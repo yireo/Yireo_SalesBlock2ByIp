@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.1.1] - 10 April 2024
 ### Fixed
-- Compat PHP 8.2
+- Rename RuleMatch namespace because of compat PHP 8.2
 
 ## [2.1.0] - 25 April 2022
 ### Added
