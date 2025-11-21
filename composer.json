@@ -1,31 +1,31 @@
 {
-  "name": "yireo/magento2-salesblock2-by-ip",
-  "license": "OSL-3.0",
-  "type": "magento2-module",
-  "version": "2.1.2",
-  "homepage": "https://www.yireo.com/software/magento-extensions/salesblock2",
-  "description": "Block transactions based on IP matching",
-  "keywords": [
-    "composer-installer",
-    "magento"
-  ],
-  "authors": [
-    {
-      "name": "Jisse Reitsma (Yireo)",
-      "email": "jisse@yireo.com"
-    }
-  ],
-  "require": {
-    "wikimedia/ip-utils": "^4.0.1 || ^5.0",
-    "yireo/magento2-salesblock2": "^2.2",
-    "ext-pcre": "*"
-  },
-  "autoload": {
-    "psr-4": {
-      "Yireo\\SalesBlock2ByIp\\": ""
+    "name": "yireo/magento2-salesblock2-by-ip",
+    "license": "OSL-3.0",
+    "type": "magento2-module",
+    "version": "2.1.2",
+    "homepage": "https://www.yireo.com/software/magento-extensions/salesblock2",
+    "description": "Block transactions based on IP matching",
+    "keywords": [
+        "composer-installer",
+        "magento"
+    ],
+    "authors": [
+        {
+            "name": "Jisse Reitsma (Yireo)",
+            "email": "jisse@yireo.com"
+        }
+    ],
+    "require": {
+        "ext-pcre": "*",
+        "wikimedia/ip-utils": "^4.0.1 || ^5.0",
+        "yireo/magento2-salesblock2": "^2.2"
     },
-    "files": [
-      "registration.php"
-    ]
-  }
+    "autoload": {
+        "psr-4": {
+            "Yireo\\SalesBlock2ByIp\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
+    }
 }
