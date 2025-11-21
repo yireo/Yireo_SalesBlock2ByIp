@@ -3,18 +3,18 @@
 /**
  * Yireo SalesBlock2ByIp for Magento
  *
- * @package     Yireo_SalesBlock2ByIp
- * @author      Yireo (https://www.yireo.com/)
- * @copyright   Copyright 2018 Yireo (https://www.yireo.com/)
- * @license     Open Source License (OSL v3)
+ * @package         Yireo_SalesBlock2ByIp
+ * @author            Yireo (https://www.yireo.com/)
+ * @copyright     Copyright 2018 Yireo (https://www.yireo.com/)
+ * @license         Open Source License (OSL v3)
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="Yireo_SalesBlock2ByIp">
         <sequence>
-            <module name="Yireo_SalesBlock2"/>
             <module name="Magento_Store"/>
             <module name="Magento_Ui"/>
+            <module name="Yireo_SalesBlock2"/>
         </sequence>
     </module>
 </config>
