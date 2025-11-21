@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.2] - 21 November 2025
+### Fixed
+- Switch from wikimedia/ip-set to wikimedia/ip-utils [#3 @Krinkle]
+
 ## [2.1.1] - 10 April 2024
 ### Fixed
 - Rename RuleMatch namespace because of compat PHP 8.2
