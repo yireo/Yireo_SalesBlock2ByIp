@@ -16,7 +16,7 @@
     }
   ],
   "require": {
-    "wikimedia/ip-set": "^1.2",
+    "wikimedia/ip-utils": "^4.0.1 || ^5.0",
     "yireo/magento2-salesblock2": "^2.2",
     "ext-pcre": "*"
   },
