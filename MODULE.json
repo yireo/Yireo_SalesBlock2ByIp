@@ -1,0 +1,9 @@
+{
+    "module_name": "Yireo_SalesBlock2ByIp",
+    "composer_name": "yireo/magento2-salesblock2-by-ip",
+    "sequence": [
+        "Magento_Store",
+        "Magento_Ui",
+        "Yireo_SalesBlock2"
+    ]
+}
