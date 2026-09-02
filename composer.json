@@ -18,7 +18,8 @@
     "require": {
         "ext-pcre": "*",
         "wikimedia/ip-utils": "^4.0.1 || ^5.0",
-        "yireo/magento2-salesblock2": "^2.2"
+        "yireo/magento2-salesblock2": "^2.2",
+        "php": ">=8.2 <8.6"
     },
     "autoload": {
         "psr-4": {
