@@ -17,9 +17,13 @@
     ],
     "require": {
         "ext-pcre": "*",
+        "magento/framework": "^101.0|^102.0|^103.0",
         "wikimedia/ip-utils": "^4.0.1 || ^5.0",
         "yireo/magento2-salesblock2": "^2.2",
         "php": ">=8.2 <8.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
     },
     "autoload": {
         "psr-4": {
