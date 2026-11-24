@@ -11,8 +11,14 @@ This module is a helper-module for the [Yireo_SalesBlock2](https://www.yireo.com
 
 This specific module allows you to match by a specific IP pattern. The following patterns are supported:
 
-- `192.168.1.1` = Direct IP matches
-- `192.168.1.0/24` = IP ranges
+- `192.168.1.1` or `2001:db8::1` = Direct IP matches (IPv4 and IPv6, in any notation)
+- `192.168.1.0/24` or `2001:db8::/32` = IP ranges in CIDR notation
+- `192.168.1.1 - 192.168.1.10` = Explicit IP ranges
+- `*` = Every visitor
+
+Multiple patterns can be separated by a newline, `,`, `;` or `|`.
+
+Be careful with `*`: a rule with this pattern blocks orders from every visitor of the store. Partial wildcards like `192.168.1.*` are not supported and never match. Use a CIDR range like `192.168.1.0/24` instead. Invalid patterns (like `192.168.1.0/33`) are skipped and never match.
 
 ### Installation
 To install this module, use the following commands. First, install this module using composer. Note that this step will fail if the `Yireo_SalesBlock2` is not installed yet.
