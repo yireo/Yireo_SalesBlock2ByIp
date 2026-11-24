@@ -14,6 +14,7 @@ namespace Yireo\SalesBlock2ByIp\Matcher;
 use Yireo\SalesBlock2\Api\MatcherInterface;
 use Yireo\SalesBlock2\Exception\NoMatchException;
 use Yireo\SalesBlock2\Helper\Data;
+use Yireo\SalesBlock2\Logger\Debugger;
 use Yireo\SalesBlock2\RuleMatch\RuleMatch;
 use Yireo\SalesBlock2ByIp\Utils\CurrentIp;
 use Yireo\SalesBlock2ByIp\Utils\IpMatcher;
@@ -40,19 +41,27 @@ class Matcher implements MatcherInterface
     private $helper;
 
     /**
+     * @var Debugger
+     */
+    private $debugger;
+
+    /**
      * Matcher constructor.
      * @param CurrentIp $currentIp
      * @param IpMatcher $ipMatcher
      * @param Data $helper
+     * @param Debugger $debugger
      */
     public function __construct(
         CurrentIp $currentIp,
         IpMatcher $ipMatcher,
-        Data $helper
+        Data $helper,
+        Debugger $debugger
     ) {
         $this->currentIp = $currentIp;
         $this->ipMatcher = $ipMatcher;
         $this->helper = $helper;
+        $this->debugger = $debugger;
     }
 
     /**
@@ -93,8 +102,9 @@ class Matcher implements MatcherInterface
                 continue;
             }
 
-            $message = sprintf('Matched IP with %s', $matchString);
+            $this->debugger->debug(sprintf('IP %s matched pattern %s', $currentIp, $matchString));
 
+            $message = (string)__('Your IP address %1 is not allowed to place orders', $currentIp);
             $match = new RuleMatch($message);
             $match->setVariables(['ip' => $currentIp]);
             return $match;

@@ -13,8 +13,10 @@ namespace Yireo\SalesBlock2ByIp\Test\Unit\Matcher;
 
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use PHPUnit\Framework\TestCase;
+use Yireo\SalesBlock2\Api\Data\RuleInterface;
 use Yireo\SalesBlock2\Exception\NoMatchException;
 use Yireo\SalesBlock2\Helper\Data;
+use Yireo\SalesBlock2\Logger\Debugger;
 use Yireo\SalesBlock2\RuleMatch\RuleMatch;
 use Yireo\SalesBlock2ByIp\Matcher\Matcher as Target;
 use Yireo\SalesBlock2ByIp\Utils\CurrentIp;
@@ -78,10 +80,30 @@ class MatcherTest extends TestCase
         if ($expectedReturnValue === true) {
             $currentValue = $this->getCurrentIp()->getValue();
             $message = sprintf('Comparing "%s" with "%s"', $currentValue, $matchPattern);
-            $this->assertInstanceOf(RuleMatch::class, $target->match($matchPattern), $message);
+            $match = $target->match($matchPattern);
+            $this->assertInstanceOf(RuleMatch::class, $match, $message);
+            $this->assertMessageDoesNotRevealPattern($match, $matchPattern);
         } else {
             $this->expectException(NoMatchException::class);
             $target->match($matchPattern);
+        }
+    }
+
+    /**
+     * @param RuleMatch $match
+     * @param string $matchPattern
+     */
+    private function assertMessageDoesNotRevealPattern(RuleMatch $match, string $matchPattern): void
+    {
+        $rule = $this->createMock(RuleInterface::class);
+        $rule->method('getFrontendLabel')->willReturn('');
+        $match->setRule($rule);
+
+        $message = $match->getMessage();
+        $this->assertStringNotContainsString('Matched IP with', $message);
+        $matchPattern = trim($matchPattern, " \f\n\r\t\v\x00");
+        if (!str_contains($this->currentIpValue, $matchPattern)) {
+            $this->assertStringNotContainsString($matchPattern, $message);
         }
     }
 
@@ -94,7 +116,9 @@ class MatcherTest extends TestCase
         $helper = $this->getHelperMock();
         $ipMatcher = new IpMatcher();
 
-        $target = new Target($currentIp, $ipMatcher, $helper);
+        $debugger = $this->createMock(Debugger::class);
+
+        $target = new Target($currentIp, $ipMatcher, $helper, $debugger);
 
         return $target;
     }
@@ -121,7 +145,7 @@ class MatcherTest extends TestCase
 
         $helper
             ->method('stringToArray')
-            ->will($this->returnValue([$this->currentMatchPattern]));
+            ->willReturn([$this->currentMatchPattern]);
 
         return $helper;
     }
