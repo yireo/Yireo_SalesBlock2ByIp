@@ -32,33 +32,10 @@ Once this module is installed via composer, you can enable it:
 There are no further steps to take. The `Yireo_SalesBlock2` module automatically picks up on things.
 
 ### Client IP detection and reverse proxies
-This module uses the client IP as Magento detects it (`Magento\Framework\HTTP\PhpEnvironment\RemoteAddress`). It does not change how Magento reads that IP.
+This module reads the client IP from `REMOTE_ADDR` only. The `X-Forwarded-For` header can be set to any value by a client, so it is ignored by default, even when Magento core is configured to use it (Magento core uses the leftmost IP of that header, which a blocked visitor could fake to get past an IP rule).
 
-Magento core reads the `X-Forwarded-For` header before `REMOTE_ADDR`. The client can set this header to any value, unless a reverse proxy (load balancer, CDN, Varnish) in front of Magento overwrites it. Without trusted proxies configured, Magento uses the leftmost IP of the header, which is the one the client can fake. So a blocked visitor could get past an IP rule with a fake header.
+When Magento runs behind a reverse proxy (load balancer, CDN, Varnish), add the IP addresses of your proxies to the setting **Trusted proxies** under **Stores > Configuration > Yireo > Yireo SalesBlock**. When a request comes from a trusted proxy, the rightmost IP in the `X-Forwarded-For` header that is not a trusted proxy is used as the client IP. This setting is shared with `Yireo_SalesBlock2ByGeo`.
 
-When Magento runs behind a reverse proxy, list the IPs of your proxies in `app/etc/di.xml` (or in a custom module). Magento then uses the rightmost IP in the header that is not a trusted proxy:
-
-```xml
-<type name="Magento\Framework\HTTP\PhpEnvironment\RemoteAddress">
-    <arguments>
-        <argument name="trustedProxies" xsi:type="array">
-            <item name="proxy1" xsi:type="string">10.0.0.10</item>
-        </argument>
-    </arguments>
-</type>
-```
-
-If your proxy sends the client IP in a different header (like `CF-Connecting-IP`), override the `x-forwarded-for` item of the `alternativeHeaders` argument with that header. When Magento is not behind a proxy, point the item to `REMOTE_ADDR` instead, so that forwarded headers are ignored:
-
-```xml
-<type name="Magento\Framework\HTTP\PhpEnvironment\RemoteAddress">
-    <arguments>
-        <argument name="alternativeHeaders" xsi:type="array">
-            <item name="x-forwarded-for" xsi:type="string">REMOTE_ADDR</item>
-        </argument>
-    </arguments>
-</type>
-```
 ## Current status
 
 <!-- badges.test.start -->
