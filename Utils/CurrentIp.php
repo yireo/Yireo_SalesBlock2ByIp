@@ -16,30 +16,11 @@ use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 class CurrentIp
 {
     /**
-     * @var string
-     */
-    private $ip = '';
-    
-    /**
-     * @var RemoteAddress
-     */
-    private $remoteAddress;
-    
-    /**
      * @param RemoteAddress $remoteAddress
      */
     public function __construct(
-        RemoteAddress $remoteAddress
+        private readonly RemoteAddress $remoteAddress
     ) {
-        $this->remoteAddress = $remoteAddress;
-    }
-    
-    /**
-     * @param string $ip
-     */
-    public function setIp(string $ip)
-    {
-        $this->ip = $ip;
     }
 
     /**
@@ -49,12 +30,6 @@ class CurrentIp
      */
     public function getValue(): string
     {
-        if (!empty($this->ip)) {
-            return $this->ip;
-        }
-
-        $this->ip = $this->remoteAddress->getRemoteAddress();
-
-        return (string)$this->ip;
+        return (string)$this->remoteAddress->getRemoteAddress();
     }
 }

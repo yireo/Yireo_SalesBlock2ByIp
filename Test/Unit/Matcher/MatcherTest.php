@@ -105,10 +105,9 @@ class MatcherTest extends TestCase
     protected function getCurrentIp(): CurrentIp
     {
         $remoteAddress = $this->getMockBuilder(RemoteAddress::class)->disableOriginalConstructor()->getMock();
-        $currentIp = new CurrentIp($remoteAddress);
-        $currentIp->setIp($this->currentIpValue);
+        $remoteAddress->method('getRemoteAddress')->willReturn($this->currentIpValue);
 
-        return $currentIp;
+        return new CurrentIp($remoteAddress);
     }
 
     /**
