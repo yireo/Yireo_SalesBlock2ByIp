@@ -1,0 +1,35 @@
+schema_version: "1.6.0"
+id: YIREO-SALESBLOCK2-BY-IP-2026-001
+published: "2026-11-25T00:00:00Z"
+modified: "2026-11-25T00:00:00Z"
+aliases: []
+summary: Client IP spoofing via X-Forwarded-For bypasses IP rules and weakens Magento core protections
+details: >
+  Since version 2.1.1 the module globally configured Magento's RemoteAddress class to read the
+  client-supplied X-Forwarded-For header before REMOTE_ADDR, in every area. Any visitor could send a
+  forged X-Forwarded-For header to get past the IP rules of this module. Because the override was global,
+  it also affected Magento core features that rely on RemoteAddress, like the maintenance mode IP
+  allowlist, CAPTCHA and password reset rate limits and session validation. Version 3.0.0 removes the
+  global override, uses REMOTE_ADDR and only walks the X-Forwarded-For chain from the right when the request
+  comes from an IP listed in the new "Trusted proxies" setting. The same release also fixes an invalid IP
+  range causing an exception on add-to-cart and checkout for every visitor, the customer message revealing
+  the configured blocklist pattern, and a detected IP being reused across requests on long-running
+  application servers. Stores behind a reverse proxy should configure the trusted proxies after upgrading.
+severity:
+  - type: CVSS_V3
+    score: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L"
+affected:
+  - package:
+      ecosystem: Packagist
+      name: yireo/magento2-salesblock2-by-ip
+    ranges:
+      - type: ECOSYSTEM
+        events:
+          - introduced: "2.1.1"
+          - fixed: "3.0.0"
+references:
+  - type: PACKAGE
+    url: https://github.com/yireo/Yireo_SalesBlock2ByIp
+database_specific:
+  cwe_ids:
+    - CWE-348
