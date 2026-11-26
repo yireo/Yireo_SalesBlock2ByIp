@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="salesblock" translate="label" sortOrder="342" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="settings">
+                <field id="trusted_proxies" type="textarea" translate="label comment" sortOrder="4" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Trusted proxies</label>
+                    <comment>IP addresses of your reverse proxies (load balancer, CDN, Varnish), separated by commas or new lines. The X-Forwarded-For header is only used when a request comes from one of these IPs. Leave empty when Magento is not behind a proxy.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
