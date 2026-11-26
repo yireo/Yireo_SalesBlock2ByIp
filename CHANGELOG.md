@@ -23,6 +23,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The customer message revealed the configured blocklist pattern; it now shows a generic message with the visitor's own IP
 - A cached IP could be reused across requests on long-running app servers, and any code could overwrite the detected IP via setIp()
 
+## [2.1.3] - 26 November 2026
+### Security
+- Backport of security advisory YIREO-SALESBLOCK2-BY-IP-2026-001 from 3.0.0
+
+### Fixed
+- Visitors could bypass IP rules by faking the X-Forwarded-For header: the global RemoteAddress override is removed, which also restores Magento core features relying on RemoteAddress (maintenance allowlist, CAPTCHA, rate limits); stores behind a reverse proxy must configure the new "Trusted proxies" setting (see README)
+- An invalid IP range (like 10.0.0.0/33) caused an exception on add-to-cart and checkout for every visitor
+- The customer message revealed the configured blocklist pattern; it now shows a generic message with the visitor's own IP
+- A cached IP could be reused across requests on long-running app servers, and any code could overwrite the detected IP via setIp()
+
+### Added
+- New "Trusted proxies" setting: X-Forwarded-For is only used when the request comes from a listed proxy IP, read from the right
+- IPv6 range matching and recognition of alternative notations of the same IP
+
 ## [2.1.2] - 21 November 2025
 ### Fixed
 - Switch from wikimedia/ip-set to wikimedia/ip-utils [#3 @Krinkle]
