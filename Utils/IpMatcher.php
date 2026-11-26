@@ -11,7 +11,8 @@
 
 namespace Yireo\SalesBlock2ByIp\Utils;
 
-use Wikimedia\IPSet;
+use Throwable;
+use Wikimedia\IPUtils;
 
 class IpMatcher
 {
@@ -22,12 +23,19 @@ class IpMatcher
      */
     public function match(string $ip, string $matchPattern): bool
     {
-        if ($ip === $matchPattern) {
+        $matchPattern = trim($matchPattern, " \f\n\r\t\v\x00");
+        if ($matchPattern === '*') {
             return true;
         }
 
-        if ($matchPattern === '*') {
-            return true;
+        $ip = $this->canonicalize($ip);
+        if ($ip === null) {
+            return false;
+        }
+
+        $matchIp = $this->canonicalize($matchPattern);
+        if ($matchIp !== null) {
+            return IPUtils::toHex($ip) === IPUtils::toHex($matchIp);
         }
 
         return $this->matchIpRange($ip, $matchPattern);
@@ -43,11 +51,35 @@ class IpMatcher
      */
     public function matchIpRange(string $ip, string $rangeString): bool
     {
-        if (preg_match('/([0-9\.]+)\/([0-9]+)/', $rangeString)) {
-            $ipset = new IPSet([$rangeString]);
-            return (bool)$ipset->match($ip);
+        $ip = $this->canonicalize($ip);
+        $rangeString = trim($rangeString, " \f\n\r\t\v\x00");
+        if ($ip === null || !IPUtils::isValidRange($rangeString)) {
+            return false;
         }
 
-        return false;
+        try {
+            return IPUtils::isInRange($ip, $rangeString);
+        } catch (Throwable $e) {
+            return false;
+        }
+    }
+
+    /**
+     * @param string $ip
+     * @return string|null
+     */
+    private function canonicalize(string $ip): ?string
+    {
+        $ip = trim($ip, " \f\n\r\t\v\x00");
+        if ($ip === '') {
+            return null;
+        }
+
+        $canonicalIp = IPUtils::canonicalize($ip);
+        if (!is_string($canonicalIp) || !IPUtils::isValid($canonicalIp)) {
+            return null;
+        }
+
+        return $canonicalIp;
     }
 }
